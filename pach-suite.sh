@@ -1,4 +1,2 @@
 #!/bin/bash
-brew services run postgres;
-
-etcd
+brew services run postgresql;
