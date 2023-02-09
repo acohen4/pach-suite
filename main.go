@@ -37,15 +37,18 @@ func ControlCContext() (context.Context, func()) {
 func main() {
 	ctx, cancel := ControlCContext()
 	defer cancel()
-	cmd := exec.CommandContext(ctx, "postgres", "-D", "/usr/local/var/postgres")
-	if err := cmd.Start(); err != nil {
+	pgCmd := exec.CommandContext(ctx, "postgres", "-D", "/usr/local/var/postgres")
+	if err := pgCmd.Start(); err != nil {
 		panic(err)
 	}
-	cmd = exec.CommandContext(ctx, "etcd")
-	if err := cmd.Start(); err != nil {
+	etcdCmd := exec.CommandContext(ctx, "etcd")
+	if err := etcdCmd.Start(); err != nil {
 		panic(err)
 	}
-	if err := cmd.Wait(); err != nil {
+	if err := pgCmd.Wait(); err != nil {
+		panic(err)
+	}
+	if err := etcdCmd.Wait(); err != nil {
 		panic(err)
 	}
 }
